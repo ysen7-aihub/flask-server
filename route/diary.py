@@ -13,21 +13,18 @@ txt = {}
 count = 1
 
 UPLOAD_FOLDER = "./uploaded_img"
-print('os.getenv:', os.getenv('UPLOAD_FOLDER'))
 
 Diary = Namespace(name='Diary',
                   description="Diary의 이미지와 텍스트 리스트를 작성하기 위해 사용하는 API")
 
 diary_txt = Diary.model('Diary', {
-    # diary list Model 객체 생성
     'txt': fields.String(description='txt', required=True, example="수요일은 특식 데이이다. 학교 급식에서 잔반 없는 날...")
 })
 
 diary_img = Diary.model('Diary', {
-    # diary list Model 객체 생성
     'img': fields.String(description='img', required=True,
                          example="https://image.rocketpunch.com/company/5466/naver_logo.png?s=400x400&t=inside"),
-   
+
 })
 
 diary_txt_with_id = Diary.inherit('Diary With ID', diary_txt, {
@@ -42,10 +39,10 @@ diary_img_with_id = Diary.inherit('Diary With ID', diary_img, {
 @Diary.route('/txt')
 class DiaryPost(Resource):
     @Diary.expect(diary_txt)
-    @Diary.response(201, 'Success', diary_txt_with_id) 
+    @Diary.response(201, 'Success', diary_txt_with_id)
     @Diary.response(400, 'Fail')
     def post(self):
-        """서버에 Diary 리스트를 등록"""
+        """서버에 Diary 텍스트 등록"""
         global txt
 
         txt = request.json.get('txt');
@@ -54,11 +51,11 @@ class DiaryPost(Resource):
 
 @Diary.route('/img')
 class DiaryPost(Resource):
-    @Diary.expect(diary_img) 
-    @Diary.response(201, 'Success', diary_img_with_id)  
+    @Diary.expect(diary_img)
+    @Diary.response(201, 'Success', diary_img_with_id)
     @Diary.response(400, 'Fail')
     def post(self):
-        """서버에 Diary 리스트를 등록"""
+        """서버에 Diary 이미지 등록"""
         global count
         global img
         global txt
@@ -81,9 +78,9 @@ class DiaryPost(Resource):
 
 
         try:
-            cnn = requests.post('http://13.125.225.154:5000/predict/img', files=img)
+            cnn = requests.post('http://13.125.225.154/predict/img', files=img)
 
-            nlp = requests.post('http://3.34.91.153:5000/predict/txt', txt=txt).json() 
+            nlp = requests.post('http://3.34.91.153/predict/txt', txt=txt).json()
 
             query = """
                     INSERT INTO moodmaker.predict (sen_1, sen_2, sen_3, score_1, score_2, score_3, cnn_score)
@@ -101,9 +98,9 @@ class DiaryPost(Resource):
 
 """
 @Diary.route('/<int:diary_id>')
-@Diary.doc(params={'diary_id': 'A Unique ID'})
+@Diary.doc(params={'diary_id': 'A Unique ID'}) # 설명 추가
 class DiarySimple(Resource): # 이름 수정
-    @Diary.response(201, 'Success', diary_fields_with_id) 
+    @Diary.response(201, 'Success', diary_fields_with_id) # 특정 스키마가 반환된다.
     def get(self, diary_id):
         Diary 리스트에 id와 일치하는 ID를 가진 값을 반환
         return {
