@@ -1,13 +1,10 @@
 from flask import Flask
-from flask_mysqldb import MySQL
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import requests
 from flask_restx import Api
 import os
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(__name__, static_folder='./frontend/moodmaker/build', static_url_path='/')
+# CORS(app)
 
 api = Api(
     app,
@@ -22,6 +19,10 @@ api = Api(
 from route.diary import Diary
 from route.music import Music
 from route.predict import Predict
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 
 api.add_namespace(Music, '/music')
