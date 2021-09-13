@@ -26,42 +26,42 @@ class PredictSimple(Resource):
     def get(self):
         """음악 추천 결과 3개 반환"""
 
-        # TODO: nlp 연결할 때, result = SpotifyRecommend() 로 변경하기
-        # result = SpotifyRecommend()
-        result = [10, 19, 20]
+        result = SpotifyRecommend()
 
         query = "SELECT name, artist FROM music WHERE id = {0} OR id = {1} OR id = {2}".format(result[0], result[1], result[2])
         cursor.execute(query)
         result = cursor.fetchall()
-        
-        # nlp 연결 후, dummy data 수정하기
+
+        query = "SELECT sen_1, score_1, sen_2, score_2, sen_3, score_3, cnn_score " \
+                "FROM predict WHERE id IN (SELECT MAX(id) FROM predict);"
+        cursor.execute(query)
+        sen = cursor.fetchall()
+
         data = [
             {"name": result[0][0], "artist": result[0][1]},
             {"name": result[1][0], "artist": result[1][1]},
             {"name": result[2][0], "artist": result[2][1]},
             {
-                "sentiment": "슬픔",
-                "일기": 0.8,
+                "sentiment": sen[0][0],
+                "일기": sen[0][1],
                 "이미지": 0
             },
             {
-                "sentiment": "분노",
-                "일기": 0.3,
+                "sentiment": sen[0][2],
+                "일기":sen[0][3],
                 "이미지": 0
             },
             {
-                "sentiment": "놀람",
-                "일기": 0.4,
+                "sentiment": sen[0][4],
+                "일기": sen[0][5],
                 "이미지": 0
             },
             {
-                "sentiment": "행복",
-                "일기": 0.3,
-                "이미지": 0.5
+                "sentiment": "긍정지수",
+                "일기": 0,
+                "이미지": sen[0][6]
             }
-
         ]
-
 
         return data, 202
 
