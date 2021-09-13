@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import MyResponsiveRadar from "./Chart";
 import Music from "./Music";
+import API from "../utils/api";
 import Label from "./Label";
-import axios from "axios";
 
 function ResultPage() {
   const content = [];
@@ -28,8 +28,8 @@ function ResultPage() {
   ];
 
   useEffect(() => {
-    axios
-      .get("http://3.35.19.190/predict/")
+    API
+      .get("http://172.30.1.8:80/predict/")
       .then(response => {
         console.log(response.data);
         rendering(response.data);
