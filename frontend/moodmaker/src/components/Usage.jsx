@@ -31,7 +31,7 @@ function Usage() {
   return (
     <div id="services">
       <div className="s-heading">
-        <h1>지금 바로 이용해보세요! 🎵</h1>
+        <h1>지금 바로 이용해보세요🎵</h1>
         <p></p>
       </div>
       <motion.div ref={ref} animate={animation} className="b-container">
