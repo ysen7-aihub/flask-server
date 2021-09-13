@@ -29,22 +29,28 @@ const Label = () => {
     setInputStatus(radioBtnName);
   };
   const onSubmit = () => {
-    axios({
-      method: "post",
-      url: "http://3.35.19.190/predict/label",
-      data: { label: inputStatus },
-      headers: { "Content-Type": "application/json" },
-      timeout: 100000
-    })
-      .then(response => {
-        console.log(response);
+    if (inputStatus) {
+      alert("입력하신 답변은 모델 재학습에 사용됩니다. 감사합니다 :)");
+      axios({
+        method: "post",
+        url: " http://192.168.123.105:80/predict/label",
+        data: { label: inputStatus },
+        headers: { "Content-Type": "application/json" },
+        timeout: 100000
       })
-      .catch(response => {
-        console.log(response);
-      });
+        .then(response => {
+          console.log(response);
+        })
+        .catch(response => {
+          console.log(response);
+        });
+    } else {
+      alert("정답을 알려주세요!");
+    }
   };
   return (
     <>
+      <p></p>
       <RadioButtonWrapper>
         <h4>정답을 알려주세요!</h4>
         <p></p>
