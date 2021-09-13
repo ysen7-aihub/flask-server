@@ -5,12 +5,13 @@ import dotenv from "dotenv";
 
 function Music({ content }) {
   const [selectedVideo, set__selectedVideo] = useState();
-
+ 
   const videoSearch = term => {
     dotenv.config();
     YoutubeSearch({ key: process.env.API_KEY, term: term }, videos => {
       set__selectedVideo(videos[0]);
     });
+    return <VideoDetail video={selectedVideo} />;
   };
 
   return (
@@ -23,7 +24,7 @@ function Music({ content }) {
             <li key={index}>
               <h3>{data.artist + " - " + data.name}</h3>
               {/*{videoSearch(data.artist + " - " + data.name)}*/}
-              <VideoDetail video={selectedVideo} />
+              <VideoDetail video={data.src} />
             </li>
           ))}
       </div>
