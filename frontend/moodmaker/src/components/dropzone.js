@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-//import API from "../utils/api";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
@@ -17,7 +16,6 @@ export default function Dropzone() {
       }
     };
 
-    // TODO: 배포 시에는 지워줘야 한다.
     await axios
       .post("http://3.35.19.190/diary/img", formData, config)
       .then(response => {
